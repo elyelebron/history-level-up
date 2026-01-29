@@ -1,0 +1,1262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>History Study – Flashcards + Practice Test</title>
+  <style>
+    :root{
+      /* White theme */
+      --bg:#ffffff;
+      --panel:#ffffff;
+      --panel2:#f6f7fb;
+      --text:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+
+      /* Color accents */
+      --blue:#2563eb;
+      --indigo:#4f46e5;
+      --teal:#14b8a6;
+      --green:#22c55e;
+      --amber:#f59e0b;
+      --rose:#f43f5e;
+
+      --shadow: 0 14px 35px rgba(17,24,39,.10);
+      --radius: 18px;
+
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 20% -10%, rgba(37,99,235,.12), transparent 60%),
+        radial-gradient(850px 600px at 100% 0%, rgba(20,184,166,.12), transparent 55%),
+        radial-gradient(1000px 700px at 0% 100%, rgba(244,63,94,.08), transparent 55%),
+        var(--bg);
+      min-height:100vh;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:22px 16px 40px}
+    header{
+      display:flex; gap:14px; align-items:flex-end; justify-content:space-between; flex-wrap:wrap;
+      padding:10px 2px 18px;
+    }
+    .brand h1{margin:0; font-size:26px; letter-spacing:.2px}
+    .brand p{margin:6px 0 0;color:var(--muted); font-size:13px; max-width:760px; line-height:1.35}
+    .tabs{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      background: rgba(255,255,255,.8);
+      border:1px solid var(--line);
+      padding:8px;
+      border-radius:999px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .tab{
+      border:1px solid transparent;
+      background:transparent;
+      color:var(--text);
+      padding:9px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:750;
+      font-size:13px;
+      transition:.15s ease;
+    }
+    .tab:hover{border-color: rgba(37,99,235,.25)}
+    .tab.active{
+      background: rgba(37,99,235,.12);
+      border-color: rgba(37,99,235,.25);
+      color: var(--blue);
+    }
+
+    .grid{display:grid; grid-template-columns: 1.35fr .65fr; gap:16px}
+    @media (max-width: 940px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background: rgba(255,255,255,.85);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+    .card .head{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+    .card .head h2{margin:0;font-size:15px}
+    .card .head .sub{color:var(--muted);font-size:12px}
+    .body{padding:16px}
+
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .pill{
+      font-family: var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(246,247,251,.9);
+    }
+
+    .btn{
+      cursor:pointer;
+      border:1px solid rgba(37,99,235,.25);
+      background: rgba(37,99,235,.10);
+      color: var(--blue);
+      padding:10px 12px;
+      border-radius: 12px;
+      font-weight:800;
+      font-size:13px;
+      transition:.15s ease;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(37,99,235,.35)}
+    .btn:active{transform: translateY(0px)}
+    .btn.secondary{
+      color: var(--text);
+      border-color: var(--line);
+      background: rgba(246,247,251,.9);
+    }
+    .btn.good{
+      color:#065f46;
+      border-color: rgba(34,197,94,.25);
+      background: rgba(34,197,94,.10);
+    }
+    .btn.danger{
+      color:#9f1239;
+      border-color: rgba(244,63,94,.25);
+      background: rgba(244,63,94,.10);
+    }
+    .btn.small{padding:7px 10px; border-radius: 10px; font-size:12px}
+
+    .inputs{display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px}
+    @media (max-width: 520px){.inputs{grid-template-columns:1fr}}
+
+    input[type="text"], select, textarea{
+      width:100%;
+      padding:11px 12px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: rgba(246,247,251,.9);
+      color:var(--text);
+      outline:none;
+    }
+    textarea{min-height:110px; resize:vertical; font-family:var(--sans)}
+    label{font-size:12px; color:var(--muted); display:block; margin:0 0 6px 2px}
+
+    .hr{height:1px;background:var(--line);margin:14px 0}
+
+    .progress{
+      height:10px; border-radius:999px;
+      background: rgba(229,231,235,.8);
+      overflow:hidden; border:1px solid var(--line);
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+    }
+
+    /* Flashcards */
+    .flashcard{display:grid; gap:12px}
+    .fc-stage{
+      position:relative;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      min-height: 250px;
+      padding:14px;
+      background: linear-gradient(180deg, rgba(246,247,251,.95), rgba(255,255,255,.95));
+      box-shadow: inset 0 0 0 1px rgba(17,24,39,.03);
+    }
+    .fc-badge{
+      position:absolute; top:14px; right:14px;
+      font-size:12px; color:var(--muted);
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.9);
+      font-family: var(--mono);
+    }
+    .fc-controls{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+
+    .known{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(246,247,251,.9);
+    }
+    .toggle{display:flex; align-items:center; gap:10px}
+    .toggle input{transform: scale(1.1)}
+    .tag{
+      font-size:12px; padding:5px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.9);
+      color:var(--muted);
+    }
+    .tag.good{border-color: rgba(34,197,94,.25); background: rgba(34,197,94,.10); color:#065f46}
+    .tag.bad{border-color: rgba(244,63,94,.25); background: rgba(244,63,94,.10); color:#9f1239}
+
+    /* Flip animation */
+    .flip{perspective: 1200px; min-height: 220px}
+    .flip-inner{
+      position: relative;
+      width:100%;
+      min-height: 220px;
+      transform-style: preserve-3d;
+      transition: transform .5s cubic-bezier(.2,.8,.2,1);
+    }
+    .flip-inner.is-flipped{transform: rotateY(180deg)}
+    .flip-face{
+      position:absolute;
+      inset:0;
+      backface-visibility:hidden;
+      -webkit-backface-visibility:hidden;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding: 12px 12px 10px;
+    }
+    .flip-front{transform: rotateY(0deg)}
+    .flip-back{transform: rotateY(180deg)}
+
+    .term{
+      font-size:22px;
+      font-weight:950;
+      letter-spacing:.2px;
+      line-height:1.12;
+      margin:6px 0 8px;
+      color: #0f172a;
+    }
+    .definition{
+      font-size:14px;
+      line-height:1.5;
+      color:#111827;
+      white-space:pre-wrap;
+    }
+    .fc-hint{
+      margin-top:12px;
+      color: var(--muted);
+      font-size:12px;
+    }
+    .mini{font-size:12px;color:var(--muted)}
+    .split{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+
+    /* Test */
+    .q{
+      padding:14px 14px;
+      border-radius: 16px;
+      border:1px solid var(--line);
+      background: rgba(246,247,251,.9);
+      margin-bottom:12px;
+    }
+    .q .meta{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:12px}
+    .q .prompt{margin:10px 0 12px; font-size:14px; line-height:1.35}
+    .choices{display:grid; gap:10px}
+    .choice{
+      cursor:pointer;
+      padding:10px 12px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.95);
+      transition:.12s ease;
+      user-select:none;
+    }
+    .choice:hover{border-color: rgba(37,99,235,.35)}
+    .choice.selected{border-color: rgba(37,99,235,.55); background: rgba(37,99,235,.08)}
+    .choice.correct{border-color: rgba(34,197,94,.50); background: rgba(34,197,94,.10)}
+    .choice.wrong{border-color: rgba(244,63,94,.45); background: rgba(244,63,94,.10)}
+
+    .result{
+      padding:12px 14px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.95);
+      display:none;
+    }
+
+    .hide{display:none !important}
+    .footer-note{margin-top:12px; font-size:12px; color:var(--muted)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>History Study</h1>
+        <p>Flashcards + Practice Test. Filter by <strong>category</strong>, flip with animation, and run tests up to <strong>53 questions</strong>. (Auto-saves in your browser.)</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Modes">
+        <button class="tab active" data-view="flashcards" role="tab" aria-selected="true">Flashcards</button>
+        <button class="tab" data-view="test" role="tab" aria-selected="false">Practice Test</button>
+        <button class="tab" data-view="manage" role="tab" aria-selected="false">Manage Cards</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Main -->
+      <section class="card" id="mainCard">
+        <div class="head">
+          <div>
+            <h2 id="mainTitle">Flashcards</h2>
+            <div class="sub" id="mainSub">Flip, shuffle, and track what you know.</div>
+          </div>
+          <div class="row">
+            <span class="pill" id="deckInfo">Deck: 0 cards</span>
+            <span class="pill" id="modeInfo">Mode: Flashcards</span>
+          </div>
+        </div>
+
+        <div class="body">
+          <!-- Flashcards View -->
+          <div id="view-flashcards">
+            <div class="flashcard">
+              <div class="fc-stage" id="fcStage">
+                <div class="fc-badge" id="fcBadge">Card 0 / 0</div>
+
+                <div class="flip" id="flipWrap">
+                  <div class="flip-inner" id="flipInner">
+                    <div class="flip-face flip-front">
+                      <div class="term" id="fcFront">—</div>
+                      <div class="fc-hint" id="fcHint">
+                        Tip: press <span class="pill">Space</span> to flip, <span class="pill">←</span>/<span class="pill">→</span> to move, <span class="pill">K</span> to mark known.
+                      </div>
+                    </div>
+                    <div class="flip-face flip-back">
+                      <div class="definition" id="fcBack">—</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fc-controls">
+                <button class="btn secondary" id="prevBtn">← Prev</button>
+                <button class="btn" id="flipBtn">Flip</button>
+                <button class="btn secondary" id="nextBtn">Next →</button>
+                <button class="btn secondary" id="shuffleBtn">Shuffle</button>
+                <button class="btn danger" id="resetProgressBtn">Reset Progress</button>
+              </div>
+
+              <div class="known">
+                <div class="toggle">
+                  <input type="checkbox" id="knownToggle" />
+                  <label for="knownToggle" style="margin:0;color:var(--text);font-weight:800">Mark as “Known”</label>
+                </div>
+                <span class="tag" id="categoryTag">Category: —</span>
+                <span class="tag" id="knownTag">Status: —</span>
+              </div>
+
+              <div>
+                <div class="split">
+                  <div class="mini">Known progress</div>
+                  <div class="mini"><span id="knownCount">0</span>/<span id="totalCount">0</span> known</div>
+                </div>
+                <div class="progress" aria-label="Progress">
+                  <div class="bar" id="progressBar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test View -->
+          <div id="view-test" class="hide">
+            <div class="row" style="margin-bottom:12px">
+              <button class="btn" id="startTestBtn">Start New Test</button>
+              <button class="btn secondary" id="gradeTestBtn">Grade</button>
+              <button class="btn secondary" id="newSetBtn">New Questions</button>
+            </div>
+
+            <div class="inputs">
+              <div>
+                <label for="testCount"># of Questions</label>
+                <select id="testCount">
+                  <option>5</option>
+                  <option selected>10</option>
+                  <option>15</option>
+                  <option>20</option>
+                  <option>25</option>
+                  <option>30</option>
+                  <option>40</option>
+                  <option>50</option>
+                  <option>53</option>
+                </select>
+              </div>
+              <div>
+                <label for="testType">Question Type</label>
+                <select id="testType">
+                  <option value="mcq" selected>Multiple Choice (term → definition)</option>
+                  <option value="tf">True / False (facts)</option>
+                  <option value="mixed">Mixed</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div id="testArea"></div>
+
+            <div class="result" id="testResult">
+              <div class="split">
+                <strong id="scoreLine">Score: —</strong>
+                <span class="pill" id="scoreDetail">—</span>
+              </div>
+              <div class="footer-note">Missed answers are highlighted in red. Correct answers are green.</div>
+            </div>
+          </div>
+
+          <!-- Manage View -->
+          <div id="view-manage" class="hide">
+            <div class="inputs">
+              <div>
+                <label for="searchInput">Search (term/definition)</label>
+                <input id="searchInput" type="text" placeholder="Search… e.g., ‘Odyssey’ or ‘World War’" />
+              </div>
+              <div>
+                <label for="categoryFilter">Category</label>
+                <select id="categoryFilter">
+                  <option value="all" selected>All</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="inputs">
+              <div>
+                <label for="knownFilter">Known filter</label>
+                <select id="knownFilter">
+                  <option value="all" selected>All</option>
+                  <option value="known">Known only</option>
+                  <option value="unknown">Unknown only</option>
+                </select>
+              </div>
+              <div class="row" style="align-items:flex-end">
+                <button class="btn secondary" id="exportBtn">Export JSON</button>
+                <button class="btn secondary" id="importBtn">Import JSON</button>
+                <input id="importFile" type="file" accept="application/json" class="hide" />
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div>
+              <label for="addCategory">Add / Edit Card</label>
+              <div class="inputs">
+                <div>
+                  <label for="addCategory">Category</label>
+                  <input id="addCategory" type="text" placeholder="e.g., U.S. History" />
+                </div>
+                <div>
+                  <label for="addTerm">Term</label>
+                  <input id="addTerm" type="text" placeholder="e.g., War of 1812" />
+                </div>
+              </div>
+              <div style="margin-top:10px">
+                <label for="addDef">Definition</label>
+                <textarea id="addDef" placeholder="Definition…"></textarea>
+              </div>
+              <div class="row" style="margin-top:10px">
+                <button class="btn good" id="saveCardBtn">Save Card</button>
+                <button class="btn secondary" id="clearFormBtn">Clear</button>
+                <button class="btn danger" id="deleteCardBtn">Delete (by exact term)</button>
+              </div>
+              <div class="footer-note">Tip: To edit, type the exact Term and hit Save. Data auto-saves.</div>
+            </div>
+
+            <div class="hr"></div>
+            <div id="listArea"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sidebar -->
+      <aside class="card">
+        <div class="head">
+          <div>
+            <h2>Study Settings</h2>
+            <div class="sub">Pick categories + scope.</div>
+          </div>
+        </div>
+        <div class="body">
+          <div>
+            <label for="studyCategory">Study category</label>
+            <select id="studyCategory">
+              <option value="all" selected>All</option>
+            </select>
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="studyScope">Study scope</label>
+            <select id="studyScope">
+              <option value="all" selected>All cards</option>
+              <option value="unknown">Unknown only</option>
+              <option value="known">Known only</option>
+            </select>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="row">
+            <button class="btn secondary small" id="jumpRandomBtn">Random Card</button>
+            <button class="btn secondary small" id="showAnswerBtn">Show Answer</button>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="mini">
+            Keyboard:
+            <div class="footer-note">
+              <span class="pill">Space</span> flip &nbsp;
+              <span class="pill">←</span>/<span class="pill">→</span> prev/next &nbsp;
+              <span class="pill">K</span> toggle known
+            </div>
+          </div>
+
+          <div class="hr"></div>
+          <div class="mini">Everything saves locally in your browser. Use Export/Import to move it.</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    /**************
+     * DEFAULT DECK
+     **************/
+    const DEFAULT_CARDS = [
+      // Terms/Definitions
+      { category:"U.S. History", term:"War of 1812", definition:"A conflict fought between the United States and Great Britain from 1812 to 1815 over trade restrictions, British impressment of American sailors, and U.S. expansion." },
+      { category:"Ancient History", term:"The Odyssey", definition:"An ancient Greek epic poem attributed to Homer that follows the hero Odysseus on his long journey home after the Trojan War." },
+      { category:"Soviet History", term:"Glasnost", definition:"A Soviet policy introduced by Mikhail Gorbachev in the 1980s that promoted openness, transparency, and freedom of information in government." },
+      { category:"U.S. History", term:"George Washington", definition:"The first president of the United States and commander of the Continental Army during the American Revolutionary War." },
+      { category:"Latin American / European", term:"Falklands War", definition:"A brief war fought in 1982 between Argentina and the United Kingdom over control of the Falkland Islands in the South Atlantic." },
+      { category:"European History", term:"Bohemia", definition:"A historical region in Central Europe, now part of the Czech Republic, that played an important role in European political and cultural history." },
+      { category:"U.S. History", term:"Apollo Program", definition:"A U.S. space program run by NASA that successfully landed the first humans on the Moon in 1969." },
+      { category:"Economics", term:"Milton Friedman", definition:"An influential American economist who promoted free-market capitalism and limited government intervention in the economy." },
+      { category:"European History", term:"Volodymyr Zelenskyy", definition:"The president of Ukraine, elected in 2019, who has led the country during the Russo-Ukrainian War." },
+      { category:"Canadian History", term:"Quiet Revolution", definition:"A period of rapid social, political, and economic change in Quebec during the 1960s that reduced the influence of the Catholic Church." },
+      { category:"European History", term:"Battle of Borodino", definition:"A major battle fought in 1812 between Napoleon’s army and Russian forces during Napoleon’s invasion of Russia." },
+      { category:"Asian History", term:"Mao Zedong", definition:"The communist leader who founded the People’s Republic of China in 1949 and ruled until his death in 1976." },
+      { category:"U.S. History", term:"Five Civilized Tribes", definition:"A term used to describe five Native American tribes (Cherokee, Chickasaw, Choctaw, Creek, and Seminole) that adopted aspects of European-American culture." },
+      { category:"Ancient History", term:"Cyrus the Great", definition:"The founder of the Persian Empire, known for his military conquests and policies of religious tolerance." },
+      { category:"European / Asian History", term:"Marco Polo", definition:"A Venetian explorer who traveled to Asia in the 13th century and helped increase European knowledge of China." },
+      { category:"U.S. History", term:"Iran Hostage Crisis", definition:"A 1979–1981 event in which Iranian militants held 52 American diplomats hostage in Tehran." },
+      { category:"European History", term:"René Descartes", definition:"A French philosopher and mathematician often considered the father of modern philosophy, famous for the phrase “I think, therefore I am.”" },
+      { category:"U.S. History", term:"Zoot Suit Riots", definition:"A series of violent clashes in Los Angeles in 1943 between U.S. servicemen and Mexican American youths." },
+      { category:"European History", term:"Brexit", definition:"The United Kingdom’s withdrawal from the European Union, formally completed in 2020." },
+      { category:"Asian History", term:"Lee Kuan Yew", definition:"The first prime minister of Singapore, credited with transforming the country into a major global economic power." },
+      { category:"European History", term:"Archduke Franz Ferdinand", definition:"The heir to the Austro-Hungarian throne whose assassination in 1914 sparked World War I." },
+      { category:"Oceania History", term:"Musket Wars", definition:"A series of conflicts in New Zealand between Māori tribes during the early 19th century, intensified by the introduction of firearms." },
+      { category:"European History", term:"Estado Novo", definition:"An authoritarian political regime that ruled Portugal from the 1930s to the 1970s under António Salazar." },
+      { category:"European History", term:"French Revolution", definition:"A major political and social upheaval in France from 1789 to 1799 that led to the overthrow of the monarchy." },
+      { category:"World History", term:"Great Depression", definition:"A worldwide economic downturn beginning in 1929 that caused massive unemployment and poverty." },
+      { category:"Latin American History", term:"Juan Ponce de León", definition:"A Spanish explorer who explored Florida and is often associated with the legend of the Fountain of Youth." },
+      { category:"World History", term:"NATO", definition:"The North Atlantic Treaty Organization, a military alliance formed in 1949 for collective defense." },
+      { category:"U.S. History", term:"Watergate Scandal", definition:"A political scandal in the 1970s that led to the resignation of U.S. President Richard Nixon." },
+      { category:"Ancient History", term:"Peloponnesian War", definition:"A long conflict between Athens and Sparta fought from 431 to 404 BCE in ancient Greece." },
+      { category:"World Religions", term:"Buddhism", definition:"A major world religion founded by Siddhartha Gautama (the Buddha) that teaches the path to enlightenment through ethical living and meditation." },
+
+      // Fact statements for True/False pool
+      { category:"African History", term:"FACT: Johannesburg gold discovery", definition:"The discovery of gold in the Witwatersrand Basin in South Africa sparked the growth of Johannesburg.", fact:true },
+      { category:"African History", term:"FACT: Menelik II Ethiopia", definition:"The Ethiopian Empire was extended to its greatest extent under Menelik II.", fact:true },
+      { category:"Asian History", term:"FACT: Hammurabi code", definition:"While ruling Babylonia, Hammurabi established the earliest and most complete written legal code.", fact:true },
+      { category:"Asian History", term:"FACT: Indira Gandhi", definition:"Indira Gandhi was the first female prime minister of India.", fact:true },
+      { category:"Asian History", term:"FACT: Bongbong Marcos", definition:"The current president of the Philippines, Bongbong Marcos, is the son of the country’s former dictator, Ferdinand Marcos.", fact:true },
+      { category:"Asian History", term:"FACT: Silk Road", definition:"An ancient trade network between China and the West was defined by the trading of silk.", fact:true },
+      { category:"Asian History", term:"FACT: Baghdad Abbasids", definition:"The city of Baghdad served as the capital of the Abbasid Caliphate.", fact:true },
+      { category:"Ancient History", term:"FACT: Sparta training", definition:"Sparta was a powerful city-state in Greece where boys began military training at age seven.", fact:true },
+      { category:"Ancient History", term:"FACT: Alexander succeeds Philip", definition:"In 336 BCE, Alexander the Great succeeded his father, Philip II, as King of Macedon.", fact:true },
+      { category:"European History", term:"FACT: Constantine converts", definition:"Constantine the Great was the first Roman emperor to convert to Christianity.", fact:true },
+      { category:"European History", term:"FACT: Henry VIII break", definition:"Henry VIII broke from the Catholic Church to annul his marriage to Catherine of Aragon in order to marry Anne Boleyn.", fact:true },
+      { category:"European History", term:"FACT: Battle of the Bulge", definition:"During World War II, the final major German offensive in the West occurred at the Battle of the Bulge, fought mostly in Belgium and Luxembourg in December 1944.", fact:true },
+      { category:"European History", term:"FACT: Russo-Ukrainian War", definition:"The Russo-Ukrainian War has been the deadliest war in Europe since World War II.", fact:true },
+      { category:"European History", term:"FACT: Leonardo works", definition:"Leonardo da Vinci created notable Italian Renaissance artworks such as Mona Lisa and The Last Supper.", fact:true },
+      { category:"European History", term:"FACT: Churchill leads UK", definition:"During World War II, the United Kingdom was led by Prime Minister Winston Churchill.", fact:true },
+      { category:"European History", term:"FACT: Frederick the Great", definition:"Frederick the Great’s nearly 50-year reign in the 18th century led to the emergence of Prussia as a major European power.", fact:true },
+      { category:"European History", term:"FACT: Martin Luther theses", definition:"Martin Luther sparked the Protestant Reformation after criticizing the sale of indulgences in his Ninety-five Theses.", fact:true },
+      { category:"Latin American History", term:"FACT: Juan Perón", definition:"Juan Perón was the president of Argentina from 1946 until his overthrow in 1955 and again from 1973 until his death in 1974.", fact:true },
+      { category:"Latin American History", term:"FACT: Haiti revolt", definition:"Haiti was the site of a successful slave revolt against French colonial rule.", fact:true },
+      { category:"U.S. History", term:"FACT: Cuba & Spanish-American War", definition:"Cuba’s struggle for independence sparked the Spanish-American War.", fact:true },
+      { category:"U.S. History", term:"FACT: Jefferson authored DOI", definition:"The Declaration of Independence was principally authored by Thomas Jefferson.", fact:true },
+      { category:"U.S. History", term:"FACT: Obama slogans", definition:"Barack Obama ran with the primary slogans “Hope” and “Forward” during his two presidential campaigns.", fact:true },
+      { category:"U.S. History", term:"FACT: Hamilton musical", definition:"Lin-Manuel Miranda’s 2015 musical, Hamilton, covers the life of Alexander Hamilton during the American Revolution; Hamilton was also the first Secretary of the Treasury.", fact:true },
+    ];
+
+    /*****************
+     * STORAGE + STATE
+     *****************/
+    const STORAGE_KEY = "history_study_deck_white_v1";
+    const PROGRESS_KEY = "history_study_known_white_v1";
+
+    let cards = [];
+    let knownSet = new Set();
+
+    let studyCategory = "all";
+    let studyScope = "all"; // all/known/unknown
+    let filteredIndexes = [];
+    let currentPos = 0;
+    let showingBack = false;
+
+    let testQuestions = [];
+    let testGraded = false;
+
+    const $ = (id) => document.getElementById(id);
+    const uniq = (arr) => Array.from(new Set(arr));
+    const clamp = (n,a,b) => Math.max(a, Math.min(b, n));
+
+    function cardKey(card){ return `${card.category}::${card.term}`; }
+    function isKnown(card){ return knownSet.has(cardKey(card)); }
+    function saveDeck(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(cards)); }
+    function saveProgress(){ localStorage.setItem(PROGRESS_KEY, JSON.stringify(Array.from(knownSet))); }
+
+    function loadAll(){
+      const stored = localStorage.getItem(STORAGE_KEY);
+      cards = stored ? JSON.parse(stored) : structuredClone(DEFAULT_CARDS);
+      const storedKnown = localStorage.getItem(PROGRESS_KEY);
+      knownSet = new Set(storedKnown ? JSON.parse(storedKnown) : []);
+    }
+
+    function getCategories(){
+      return uniq(cards.map(c => c.category)).sort((a,b)=>a.localeCompare(b));
+    }
+
+    function computeFiltered(){
+      filteredIndexes = cards
+        .map((c, idx) => ({c, idx}))
+        .filter(({c}) => (studyCategory === "all" ? true : c.category === studyCategory))
+        .filter(({c}) => {
+          if(studyScope === "all") return true;
+          return studyScope === "known" ? isKnown(c) : !isKnown(c);
+        })
+        .map(x => x.idx);
+
+      if(filteredIndexes.length === 0) currentPos = 0;
+      else currentPos = clamp(currentPos, 0, filteredIndexes.length - 1);
+    }
+
+    function currentCard(){
+      if(filteredIndexes.length === 0) return null;
+      return cards[ filteredIndexes[currentPos] ];
+    }
+
+    function updateTopBadges(){
+      $("deckInfo").textContent = `Deck: ${cards.length} cards`;
+      const mode = document.querySelector(".tab.active")?.textContent?.trim() ?? "—";
+      $("modeInfo").textContent = `Mode: ${mode}`;
+    }
+
+    /************
+     * VIEWS
+     ************/
+    const views = ["flashcards","test","manage"];
+
+    function setView(view){
+      for(const v of views){
+        $("view-" + v).classList.toggle("hide", v !== view);
+      }
+      document.querySelectorAll(".tab").forEach(btn => {
+        const isActive = btn.dataset.view === view;
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+
+      if(view === "flashcards"){
+        $("mainTitle").textContent = "Flashcards";
+        $("mainSub").textContent = "Flip with animation, shuffle, and track what you know.";
+        renderFlashcard();
+      } else if(view === "test"){
+        $("mainTitle").textContent = "Practice Test";
+        $("mainSub").textContent = "Multiple choice and/or True/False from your deck (up to 53 questions).";
+        renderTestShell();
+      } else {
+        $("mainTitle").textContent = "Manage Cards";
+        $("mainSub").textContent = "Search, filter by category, add/edit cards, export/import.";
+        renderManage();
+      }
+      updateTopBadges();
+    }
+
+    /****************
+     * FLASHCARDS
+     ****************/
+    function updateProgressBar(){
+      const total = filteredIndexes.length;
+      $("totalCount").textContent = String(total);
+      if(total === 0){
+        $("knownCount").textContent = "0";
+        $("progressBar").style.width = "0%";
+        return;
+      }
+      const known = filteredIndexes.reduce((acc, idx) => acc + (isKnown(cards[idx]) ? 1 : 0), 0);
+      $("knownCount").textContent = String(known);
+      $("progressBar").style.width = `${Math.round((known/total)*100)}%`;
+    }
+
+    function renderFlashcard(){
+      computeFiltered();
+      const total = filteredIndexes.length;
+      const card = currentCard();
+
+      // reset flip to front
+      showingBack = false;
+      $("flipInner").classList.remove("is-flipped");
+
+      if(!card){
+        $("fcFront").textContent = "No cards match your filters.";
+        $("fcBack").textContent = "";
+        $("fcBadge").textContent = `Card 0 / 0`;
+        $("knownToggle").checked = false;
+        $("categoryTag").textContent = "Category: —";
+        $("knownTag").textContent = "Status: —";
+        $("knownTag").className = "tag";
+        updateProgressBar();
+        return;
+      }
+
+      $("fcFront").textContent = card.term;
+      $("fcBack").textContent = card.definition;
+      $("fcBadge").textContent = `Card ${currentPos + 1} / ${total}`;
+
+      $("categoryTag").textContent = `Category: ${card.category}`;
+      const k = isKnown(card);
+      $("knownToggle").checked = k;
+      $("knownTag").textContent = `Status: ${k ? "Known" : "Unknown"}`;
+      $("knownTag").className = "tag " + (k ? "good" : "bad");
+
+      updateProgressBar();
+    }
+
+    function flipCard(forceShowBack = null){
+      const card = currentCard();
+      if(!card) return;
+
+      if(forceShowBack === null) showingBack = !showingBack;
+      else showingBack = !!forceShowBack;
+
+      $("flipInner").classList.toggle("is-flipped", showingBack);
+    }
+
+    function nextCard(){
+      if(filteredIndexes.length === 0) return;
+      currentPos = (currentPos + 1) % filteredIndexes.length;
+      renderFlashcard();
+    }
+
+    function prevCard(){
+      if(filteredIndexes.length === 0) return;
+      currentPos = (currentPos - 1 + filteredIndexes.length) % filteredIndexes.length;
+      renderFlashcard();
+    }
+
+    function shuffleFiltered(){
+      for(let i = filteredIndexes.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [filteredIndexes[i], filteredIndexes[j]] = [filteredIndexes[j], filteredIndexes[i]];
+      }
+      currentPos = 0;
+      renderFlashcard();
+    }
+
+    function setKnown(card, val){
+      const k = cardKey(card);
+      if(val) knownSet.add(k);
+      else knownSet.delete(k);
+      saveProgress();
+    }
+
+    /***************
+     * PRACTICE TEST
+     ***************/
+    function renderTestShell(){
+      $("testArea").innerHTML = "";
+      $("testResult").style.display = "none";
+      testQuestions = [];
+      testGraded = false;
+    }
+
+    function getDeckForTest(){
+      computeFiltered();
+      return filteredIndexes.map(i => ({ card: cards[i], idx: i }));
+    }
+
+    function pickRandom(arr, n){
+      const copy = arr.slice();
+      for(let i = copy.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy.slice(0, Math.min(n, copy.length));
+    }
+
+    function buildMCQQuestions(deckItems, count){
+      const pool = deckItems.filter(x => !!x.card.term && !!x.card.definition);
+      const picked = pickRandom(pool, count);
+      const allDefs = pool.map(x => x.card.definition);
+
+      return picked.map(({card, idx}, qIndex) => {
+        const correct = card.definition;
+        const distractors = pickRandom(allDefs.filter(d => d !== correct), 3);
+        const choices = pickRandom([correct, ...distractors], 4);
+        return {
+          type:"mcq",
+          prompt:`What is the best definition of: "${card.term}"?`,
+          choices,
+          correctIndex: choices.indexOf(correct),
+          selectedIndex: null,
+          cardIndex: idx,
+          label: `Q${qIndex+1}`
+        };
+      });
+    }
+
+    function buildTFQuestions(deckItems, count){
+      const factPool = deckItems.filter(x => x.card.fact === true);
+      const pool = (factPool.length >= 4) ? factPool : deckItems;
+      const picked = pickRandom(pool, count);
+
+      return picked.map(({card, idx}, qIndex) => {
+        const makeFalse = Math.random() < 0.5;
+        let statement = card.definition;
+        let answer = true;
+
+        if(makeFalse && pool.length > 1){
+          const other = pickRandom(pool.filter(x => x.idx !== idx), 1)[0];
+          statement = other.card.definition;
+          answer = false;
+        }
+
+        return {
+          type:"tf",
+          prompt: statement,
+          choices:["True","False"],
+          correctIndex: answer ? 0 : 1,
+          selectedIndex: null,
+          cardIndex: idx,
+          label: `Q${qIndex+1}`
+        };
+      });
+    }
+
+    function startTest(){
+      const count = parseInt($("testCount").value, 10);
+      const kind = $("testType").value;
+
+      const deckItems = getDeckForTest();
+      $("testArea").innerHTML = "";
+      $("testResult").style.display = "none";
+      testGraded = false;
+
+      if(deckItems.length === 0){
+        $("testArea").innerHTML = `<div class="q"><div class="prompt">No cards match your Study Settings. Change the category/scope.</div></div>`;
+        testQuestions = [];
+        return;
+      }
+
+      const maxPossible = deckItems.length;
+      const realCount = Math.min(count, maxPossible);
+
+      let qs = [];
+      if(kind === "mcq"){
+        qs = buildMCQQuestions(deckItems, realCount);
+      } else if(kind === "tf"){
+        qs = buildTFQuestions(deckItems, realCount);
+      } else {
+        const half = Math.floor(realCount/2);
+        const mcq = buildMCQQuestions(deckItems, realCount - half);
+        const tf  = buildTFQuestions(deckItems, half);
+        qs = pickRandom([...mcq, ...tf], realCount);
+        qs.forEach((q,i)=> q.label = `Q${i+1}`);
+      }
+
+      testQuestions = qs;
+      renderTestQuestions();
+
+      if(realCount < count){
+        const note = document.createElement("div");
+        note.className = "footer-note";
+        note.textContent = `Note: You asked for ${count} questions, but only ${maxPossible} cards match your filters, so the test uses ${realCount}.`;
+        $("testArea").prepend(note);
+      }
+    }
+
+    function renderTestQuestions(){
+      const container = $("testArea");
+
+      testQuestions.forEach((q, i) => {
+        const el = document.createElement("div");
+        el.className = "q";
+        el.dataset.qindex = String(i);
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        meta.innerHTML = `<span>${q.label} • ${q.type.toUpperCase()}</span><span>Card #${q.cardIndex+1}</span>`;
+
+        const prompt = document.createElement("div");
+        prompt.className = "prompt";
+        prompt.textContent = q.prompt;
+
+        const choices = document.createElement("div");
+        choices.className = "choices";
+
+        q.choices.forEach((c, ci) => {
+          const ch = document.createElement("div");
+          ch.className = "choice";
+          ch.textContent = c;
+          ch.addEventListener("click", () => {
+            if(testGraded) return;
+            q.selectedIndex = ci;
+            choices.querySelectorAll(".choice").forEach((node, idx) => {
+              node.classList.toggle("selected", idx === ci);
+            });
+          });
+          choices.appendChild(ch);
+        });
+
+        el.appendChild(meta);
+        el.appendChild(prompt);
+        el.appendChild(choices);
+        container.appendChild(el);
+      });
+    }
+
+    function gradeTest(){
+      if(testQuestions.length === 0) return;
+      testGraded = true;
+
+      let correct = 0;
+      testQuestions.forEach((q, i) => {
+        const qEl = document.querySelector(`.q[data-qindex="${i}"]`);
+        const nodes = Array.from(qEl.querySelectorAll(".choice"));
+
+        nodes.forEach((node, idx) => {
+          node.classList.remove("correct","wrong");
+          if(idx === q.correctIndex) node.classList.add("correct");
+          if(q.selectedIndex !== null && idx === q.selectedIndex && q.selectedIndex !== q.correctIndex){
+            node.classList.add("wrong");
+          }
+        });
+
+        if(q.selectedIndex === q.correctIndex) correct++;
+      });
+
+      const total = testQuestions.length;
+      const pct = Math.round((correct/total)*100);
+      $("scoreLine").textContent = `Score: ${correct} / ${total} (${pct}%)`;
+      $("scoreDetail").textContent =
+        pct >= 80 ? "Nice work" :
+        pct >= 60 ? "Keep going" :
+        "More review needed";
+
+      $("testResult").style.display = "block";
+      $("testResult").scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+    /*****************
+     * MANAGE
+     *****************/
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function populateCategorySelects(){
+      const cats = getCategories();
+
+      const sc = $("studyCategory");
+      const cf = $("categoryFilter");
+
+      const prevSC = sc.value || "all";
+      const prevCF = cf.value || "all";
+
+      sc.innerHTML = `<option value="all">All</option>` + cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+      cf.innerHTML = `<option value="all">All</option>` + cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+
+      sc.value = cats.includes(prevSC) ? prevSC : "all";
+      cf.value = cats.includes(prevCF) ? prevCF : "all";
+    }
+
+    function renderManage(){
+      populateCategorySelects();
+
+      const q = ($("searchInput").value || "").trim().toLowerCase();
+      const cat = $("categoryFilter").value;
+      const kf = $("knownFilter").value;
+
+      const items = cards
+        .map((c, idx) => ({c, idx}))
+        .filter(({c}) => cat === "all" ? true : c.category === cat)
+        .filter(({c}) => {
+          if(kf === "all") return true;
+          return kf === "known" ? isKnown(c) : !isKnown(c);
+        })
+        .filter(({c}) => {
+          if(!q) return true;
+          return (c.term + " " + c.definition).toLowerCase().includes(q);
+        });
+
+      const list = $("listArea");
+      list.innerHTML = "";
+
+      if(items.length === 0){
+        list.innerHTML = `<div class="q"><div class="prompt">No matches.</div></div>`;
+        return;
+      }
+
+      items.slice(0, 120).forEach(({c, idx}) => {
+        const box = document.createElement("div");
+        box.className = "q";
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        meta.innerHTML = `<span>${escapeHtml(c.category)}</span><span>${isKnown(c) ? "Known" : "Unknown"}</span>`;
+
+        const prompt = document.createElement("div");
+        prompt.className = "prompt";
+        prompt.innerHTML = `<strong>${escapeHtml(c.term)}</strong><div class="mini" style="margin-top:6px;white-space:pre-wrap">${escapeHtml(c.definition)}</div>`;
+
+        const actions = document.createElement("div");
+        actions.className = "row";
+        actions.style.marginTop = "10px";
+        actions.innerHTML = `
+          <button class="btn secondary small">Study This</button>
+          <button class="btn secondary small">${isKnown(c) ? "Mark Unknown" : "Mark Known"}</button>
+        `;
+
+        actions.children[0].addEventListener("click", () => {
+          studyCategory = c.category;
+          $("studyCategory").value = studyCategory;
+          studyScope = "all";
+          $("studyScope").value = studyScope;
+
+          computeFiltered();
+          const pos = filteredIndexes.indexOf(idx);
+          currentPos = pos >= 0 ? pos : 0;
+
+          setView("flashcards");
+          renderFlashcard();
+        });
+
+        actions.children[1].addEventListener("click", () => {
+          setKnown(c, !isKnown(c));
+          renderManage();
+          renderFlashcard();
+        });
+
+        box.appendChild(meta);
+        box.appendChild(prompt);
+        box.appendChild(actions);
+        list.appendChild(box);
+      });
+
+      if(items.length > 120){
+        const more = document.createElement("div");
+        more.className = "footer-note";
+        more.textContent = `Showing first 120 of ${items.length} matches. Use search/filter to narrow.`;
+        list.appendChild(more);
+      }
+    }
+
+    function clearForm(){
+      $("addCategory").value = "";
+      $("addTerm").value = "";
+      $("addDef").value = "";
+    }
+
+    function saveCardFromForm(){
+      const cat = $("addCategory").value.trim();
+      const term = $("addTerm").value.trim();
+      const def = $("addDef").value.trim();
+
+      if(!cat || !term || !def){
+        alert("Please fill Category, Term, and Definition.");
+        return;
+      }
+
+      const existingIndex = cards.findIndex(c => c.term === term);
+      if(existingIndex >= 0){
+        const old = cards[existingIndex];
+        const wasKnown = isKnown(old);
+
+        cards[existingIndex] = { category: cat, term, definition: def };
+        if(wasKnown){
+          knownSet.delete(cardKey(old));
+          knownSet.add(cardKey(cards[existingIndex]));
+          saveProgress();
+        }
+      } else {
+        cards.push({ category: cat, term, definition: def });
+      }
+
+      saveDeck();
+      renderManage();
+      renderFlashcard();
+      clearForm();
+    }
+
+    function deleteCardByTerm(){
+      const term = $("addTerm").value.trim();
+      if(!term){ alert("Type the exact Term to delete."); return; }
+      const idx = cards.findIndex(c => c.term === term);
+      if(idx < 0){ alert("No card found with that exact Term."); return; }
+
+      const c = cards[idx];
+      knownSet.delete(cardKey(c));
+      cards.splice(idx, 1);
+
+      saveDeck(); saveProgress();
+      renderManage();
+      renderFlashcard();
+      clearForm();
+    }
+
+    function exportJSON(){
+      const payload = { version: 1, exportedAt: new Date().toISOString(), cards, knownKeys: Array.from(knownSet) };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "history-study-deck.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importJSONFile(file){
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const data = JSON.parse(reader.result);
+          if(!data || !Array.isArray(data.cards)) throw new Error("Invalid JSON format.");
+          cards = data.cards;
+          knownSet = new Set(Array.isArray(data.knownKeys) ? data.knownKeys : []);
+          saveDeck(); saveProgress();
+          renderManage();
+          renderFlashcard();
+          alert("Imported successfully!");
+        } catch(e){
+          alert("Import failed: " + e.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    /************
+     * EVENTS
+     ************/
+    function bindEvents(){
+      document.querySelectorAll(".tab").forEach(btn => {
+        btn.addEventListener("click", () => setView(btn.dataset.view));
+      });
+
+      $("flipBtn").addEventListener("click", () => flipCard());
+      $("prevBtn").addEventListener("click", prevCard);
+      $("nextBtn").addEventListener("click", nextCard);
+      $("shuffleBtn").addEventListener("click", shuffleFiltered);
+      $("resetProgressBtn").addEventListener("click", () => {
+        if(confirm("Reset known/unknown progress?")){
+          knownSet = new Set();
+          saveProgress();
+          renderFlashcard();
+          renderManage();
+        }
+      });
+
+      $("knownToggle").addEventListener("change", (e) => {
+        const c = currentCard();
+        if(!c) return;
+        setKnown(c, e.target.checked);
+        renderFlashcard();
+        renderManage();
+      });
+
+      $("fcStage").addEventListener("click", () => flipCard());
+
+      $("studyCategory").addEventListener("change", (e) => {
+        studyCategory = e.target.value;
+        currentPos = 0;
+        renderFlashcard();
+      });
+      $("studyScope").addEventListener("change", (e) => {
+        studyScope = e.target.value;
+        currentPos = 0;
+        renderFlashcard();
+      });
+      $("jumpRandomBtn").addEventListener("click", () => {
+        computeFiltered();
+        if(filteredIndexes.length === 0) return;
+        currentPos = Math.floor(Math.random() * filteredIndexes.length);
+        renderFlashcard();
+      });
+      $("showAnswerBtn").addEventListener("click", () => flipCard(true));
+
+      $("startTestBtn").addEventListener("click", startTest);
+      $("newSetBtn").addEventListener("click", startTest);
+      $("gradeTestBtn").addEventListener("click", gradeTest);
+
+      $("searchInput").addEventListener("input", renderManage);
+      $("categoryFilter").addEventListener("change", renderManage);
+      $("knownFilter").addEventListener("change", renderManage);
+
+      $("saveCardBtn").addEventListener("click", saveCardFromForm);
+      $("clearFormBtn").addEventListener("click", clearForm);
+      $("deleteCardBtn").addEventListener("click", deleteCardByTerm);
+
+      $("exportBtn").addEventListener("click", exportJSON);
+      $("importBtn").addEventListener("click", () => $("importFile").click());
+      $("importFile").addEventListener("change", (e) => {
+        const f = e.target.files?.[0];
+        if(f) importJSONFile(f);
+        e.target.value = "";
+      });
+
+      window.addEventListener("keydown", (e) => {
+        const activeView = document.querySelector(".tab.active")?.dataset.view;
+        if(activeView !== "flashcards") return;
+
+        if(e.code === "Space"){
+          e.preventDefault();
+          flipCard();
+        } else if(e.code === "ArrowRight"){
+          nextCard();
+        } else if(e.code === "ArrowLeft"){
+          prevCard();
+        } else if(e.key.toLowerCase() === "k"){
+          const c = currentCard();
+          if(!c) return;
+          const newVal = !isKnown(c);
+          setKnown(c, newVal);
+          $("knownToggle").checked = newVal;
+          renderFlashcard();
+          renderManage();
+        }
+      });
+    }
+
+    /************
+     * INIT
+     ************/
+    (function init(){
+      loadAll();
+      populateCategorySelects();
+
+      studyCategory = "all";
+      studyScope = "all";
+      $("studyCategory").value = "all";
+      $("studyScope").value = "all";
+
+      updateTopBadges();
+      bindEvents();
+      setView("flashcards");
+      renderManage();
+    })();
+  </script>
+</body>
+</html>
